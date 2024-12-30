@@ -40,46 +40,50 @@ $stmt->execute();
 $result = $stmt->get_result();
 $user = $result->fetch_assoc();
 ?>
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <h2 class="text-center mb-4">Chỉnh sửa thông tin cá nhân</h2>
-                <form method="POST" action="">
-                    <!-- Họ tên -->
-                    <div class="mb-3">
-                        <label for="hoten_user" class="form-label">Họ và tên</label>
-                        <input type="text" class="form-control" id="hoten_user" name="hoten_user" value="<?php echo htmlspecialchars($user['hoten_user']); ?>" required>
-                    </div>
 
-                    <!-- Email -->
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="email" name="email" value="<?php echo htmlspecialchars($user['email']); ?>" required>
-                    </div>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-lg border-0">
+                <div class="card-header text-center" style="background-color: #f8f9fa; color: #343a40;">
+                    <h4>Chỉnh sửa thông tin cá nhân</h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="">
+                        <!-- Họ tên -->
+                        <div class="mb-3">
+                            <label for="hoten_user" class="form-label">Họ và tên</label>
+                            <input type="text" class="form-control" id="hoten_user" name="hoten_user" value="<?php echo htmlspecialchars($user['hoten_user']); ?>" required>
+                        </div>
 
-                    <!-- Số điện thoại -->
-                    <div class="mb-3">
-                        <label for="so_dien_thoai" class="form-label">Số điện thoại</label>
-                        <input type="text" class="form-control" id="so_dien_thoai" name="so_dien_thoai" value="<?php echo htmlspecialchars($user['so_dien_thoai']); ?>" required>
-                    </div>
+                        <!-- Email -->
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" value="<?php echo htmlspecialchars($user['email']); ?>" required>
+                        </div>
 
-                    <!-- Địa chỉ -->
-                    <div class="mb-3">
-                        <label for="dia_chi" class="form-label">Địa chỉ</label>
-                        <textarea class="form-control" id="dia_chi" name="dia_chi" rows="3" required><?php echo htmlspecialchars($user['dia_chi']); ?></textarea>
-                    </div>
+                        <!-- Số điện thoại -->
+                        <div class="mb-3">
+                            <label for="so_dien_thoai" class="form-label">Số điện thoại</label>
+                            <input type="text" class="form-control" id="so_dien_thoai" name="so_dien_thoai" value="<?php echo htmlspecialchars($user['so_dien_thoai']); ?>" required>
+                        </div>
 
-                    <!-- Nút lưu thông tin -->
-                    <div class="d-grid">
-                        <button type="submit" class="btn btn-primary">Lưu thông tin</button>
-                    </div>
-                </form>
-                <!-- Nút quay lại -->
-                <div class="text-center mt-3">
-                    <a href="index.php" class="btn btn-secondary">Quay lại</a>
+                        <!-- Địa chỉ -->
+                        <div class="mb-3">
+                            <label for="dia_chi" class="form-label">Địa chỉ</label>
+                            <textarea class="form-control" id="dia_chi" name="dia_chi" rows="3" required><?php echo htmlspecialchars($user['dia_chi']); ?></textarea>
+                        </div>
+
+                        <!-- Nút lưu thông tin -->
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-dark">Lưu thông tin</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer text-center" style="background-color: #f8f9fa;">
+                    <a href="javascript:history.back()" class="btn btn-light">Quay lại</a>  
                 </div>
             </div>
         </div>
     </div>
-
-   
+</div>

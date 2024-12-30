@@ -12,61 +12,72 @@ $query_chitiet = $stmt->get_result();
 ?>
 
 <div class="container my-5">
-    <!-- Hiển thị thông báo nếu có -->
+    <!-- Hiển thị thông báo -->
     <?php if (isset($_SESSION['message'])): ?>
-        <div class="alert alert-info text-center" role="alert">
+        <div class="alert alert-success text-center" role="alert">
             <?php echo $_SESSION['message']; unset($_SESSION['message']); ?>
         </div>
     <?php endif; ?>
 
-    <div class="row">
-        <?php while ($row = $query_chitiet->fetch_assoc()): ?>
-            <!-- Hình ảnh sách -->
-            <div class="col-md-6 d-flex justify-content-center align-items-center mb-4">
-                <img class="img-fluid rounded" 
-                     src="admin/modules/qlsach/img/<?php echo htmlspecialchars($row['hinh_anh']); ?>" 
-                     alt="Book cover" style="max-width: 300px;">
-            </div>
+    <div class="card shadow-lg border-0">
+        <div class="row g-0">
+            <?php while ($row = $query_chitiet->fetch_assoc()): ?>
+                <!-- Hình ảnh sách -->
+                <div class="col-md-5 d-flex justify-content-center align-items-center bg-light">
+                    <img class="img-fluid rounded shadow" 
+                         src="admin/modules/qlsach/img/<?php echo htmlspecialchars($row['hinh_anh']); ?>" 
+                         alt="Book cover" style="max-height: 400px; object-fit: contain;">
+                </div>
 
-            <!-- Thông tin chi tiết sách -->
-            <div class="col-md-6">
-                <form action="user/main/xulygio.php?idsach=<?php echo $row['ma_sach'];?>" method="POST">
-                    <div class="small text-muted mb-1">Thể loại: <?php echo htmlspecialchars($row['ten_the_loai']); ?></div>
-                    <h1 class="display-5 fw-bold"><?php echo htmlspecialchars($row['ten_sach']); ?></h1>
-                    <p class="fs-5 mb-2">Tác Giả: <span class="fw-semibold"><?php echo htmlspecialchars($row['ten_tac_gia']); ?></span></p>
-                    
-                    <!-- Mô tả sách -->
-                    <div class="lead">
-                        <div id="mota" style="max-height: 60px; overflow: hidden; transition: max-height 0.5s;">
-                            <?php echo nl2br(htmlspecialchars($row['mo_ta'])); ?>
+                <!-- Thông tin sách -->
+                <div class="col-md-7">
+                    <div class="card-body">
+                        <p class="small text-muted mb-2">Thể loại: <span class="fw-bold"><?php echo htmlspecialchars($row['ten_the_loai']); ?></span></p>
+                        <h1 class="display-6 fw-bold  mb-3"><?php echo htmlspecialchars($row['ten_sach']); ?></h1>
+                        <p class="fs-5 mb-3">
+                            <span class="text-muted">Tác Giả:</span> 
+                            <span class="fw-semibold text-dark"><?php echo htmlspecialchars($row['ten_tac_gia']); ?></span>
+                        </p>
+                        <p class="fs-5 mb-3">
+                            <span class="text-muted">Nhà Xuất Bản:</span> 
+                            <span class="text-dark"><?php echo htmlspecialchars($row['ten_nha_xuat_ban']); ?></span>
+                        </p>
+
+                        <!-- Mô tả sách -->
+                        <div class="mb-3">
+                            <p id="mota" class="lead text-muted" style="max-height: 80px; overflow: hidden; transition: max-height 0.5s;">
+                                <?php echo nl2br(htmlspecialchars($row['mo_ta'])); ?>
+                            </p>
+                            <button type="button" onclick="toggleMota()" id="xemThemBtn" 
+                                    class="btn btn-link text-primary p-0" style="text-decoration: none;">
+                                Xem thêm
+                            </button>
                         </div>
-                        <button type="button" onclick="toggleMota()" id="xemThemBtn" 
-                                class="btn btn-link p-0 mt-2" style="text-decoration: underline; color: blue;">
-                            Xem thêm
-                        </button>
-                    </div>
 
-                    <div class="d-flex mt-4">
-                        <button class="btn btn-outline-dark " type="submit" name="themgio">
-                            Thêm vào giỏ
-                        </button>
+                        <!-- Nút Thêm vào giỏ -->
+                        <form action="user/main/xulygio.php?idsach=<?php echo $row['ma_sach']; ?>" method="POST">
+                            <button class="btn btn-primary btn-lg px-4" type="submit" name="themgio">
+                                <i class="bi bi-cart-plus"></i> Thêm vào giỏ
+                            </button>
+                        </form>
                     </div>
-                </form>
-            </div>
-        <?php endwhile; ?>
+                </div>
+            <?php endwhile; ?>
+        </div>
     </div>
 </div>
 
+<!-- Script cho Xem thêm -->
 <script>
     function toggleMota() {
         var mota = document.getElementById("mota");
         var btn = document.getElementById("xemThemBtn");
 
-        if (mota.style.maxHeight === "60px") {
-            mota.style.maxHeight = "none";  // Hiển thị toàn bộ mô tả
+        if (mota.style.maxHeight === "80px") {
+            mota.style.maxHeight = "none";
             btn.innerText = "Thu gọn";
         } else {
-            mota.style.maxHeight = "60px";  // Giới hạn độ cao
+            mota.style.maxHeight = "80px";
             btn.innerText = "Xem thêm";
         }
     }

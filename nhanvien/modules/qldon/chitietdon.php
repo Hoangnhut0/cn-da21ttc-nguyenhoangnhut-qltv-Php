@@ -11,7 +11,7 @@
     <div class="card-body">
         <div class="card-header">
             <i class="fas fa-table me-1"></i>
-            Đơn hàng của: <?php echo $row_ten['hoten_user']; ?>
+            Đơn mượn sách của: <?php echo $row_ten['hoten_user']; ?>
         </div>
         <div class="card-body">
             <table id="datatablesSimple" class="table table-striped table-hover table-bordered">

@@ -12,50 +12,68 @@ $query = mysqli_query($conn, $sql_select);
 ?>
 
 <div class="container my-5">
-    <h2 class="text-center mb-4">Danh Sách Sách Đã Đặt</h2>
-    <table class="table table-striped table-hover table-bordered">
-        <thead class="table-dark">
-            <tr>
-                <th scope="col">Hình ảnh</th>
-                <th scope="col">Tên sách</th>
-                <th scope="col">Ngày đặt</th>
-                <th scope="col">Ngày trả</th>
-                <th scope="col">Duyệt</th>
-            </tr>
-        </thead>
-        <tbody>
+    <h2 class="text-center mb-4">Danh Sách Đăng Ký Mượn</h2>
+    <div class="row gy-4">
         <?php
-            if ($query->num_rows > 0) {
-                while ($row = $query->fetch_assoc()) {
-                    // Kiểm tra trạng thái để hiển thị ngày trả
-                    $ngay_tra = $row['trang_thai'] == 'da_duyet' ? date("d/m/Y", strtotime($row['ngay_tra'])) : 'Chưa duyệt';
-            ?>
-                <tr>
-                    <td>
-                        <img src="admin/modules/qlsach/img/<?php echo htmlspecialchars($row['hinh_anh']); ?>" alt="Book Image" class="img-fluid" style="width: 80px; height: auto;">
-                    </td>
-                    <td><?php echo htmlspecialchars($row['ten_sach']); ?></td>
-                    <td><?php echo date("d/m/Y", strtotime($row['ngay_dat'])); ?></td>
-                    <td><?php echo $ngay_tra; ?></td>
-                    <td>
-                        <?php 
-                            // Kiểm tra trạng thái của đơn hàng
-                            if ($row['trang_thai'] == "da_duyet") {
-                                echo '<span class="badge bg-success">Đã duyệt</span>';
-                            } elseif ($row['trang_thai'] == "cho_duyet") {
-                                echo '<span class="badge bg-warning text-dark">Chưa duyệt</span>';
-                            } else {
-                                echo '<span class="badge bg-danger">Đã bị hủy</span>';
-                            }
-                        ?>
-                    </td>
-                </tr>
-            <?php 
+        if ($query->num_rows > 0) {
+            while ($row = $query->fetch_assoc()) {
+                // Lấy ngày trả và kiểm tra trạng thái
+                $ngay_tra = ($row['trang_thai'] == 'da_duyet' && !empty($row['ngay_tra'])) ? date("d/m/Y", strtotime($row['ngay_tra'])) : 'Chưa duyệt';
+
+                // Kiểm tra nếu đã quá hạn trả
+                $is_qua_han = false;
+                if ($row['trang_thai'] == 'da_duyet' && !empty($row['ngay_tra'])) {
+                    $current_date = new DateTime();
+                    $return_date = new DateTime($row['ngay_tra']);
+                    if ($current_date > $return_date) {
+                        $is_qua_han = true;
+                    }
                 }
-            } else {
-                echo '<tr><td colspan="4" class="text-center">Bạn chưa mượn sách nào.</td></tr>';
+        ?>
+        <div class="col-md-6 col-lg-4">
+            <div class="card shadow-lg border-0 h-100">
+                <img src="admin/modules/qlsach/img/<?php echo htmlspecialchars($row['hinh_anh']); ?>" class="card-img-top rounded-top" alt="Book Image" style="height: 250px; object-fit: cover;">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title text-truncate" title="<?php echo htmlspecialchars($row['ten_sach']); ?>">
+                        <?php echo htmlspecialchars($row['ten_sach']); ?>
+                    </h5>
+                    <p class="card-text">
+                        <strong>Ngày đặt:</strong> <?php echo date("d/m/Y", strtotime($row['ngay_dat'])); ?><br>
+                        <strong>Ngày trả:</strong> <?php echo $ngay_tra; ?>
+                        <?php if ($is_qua_han) {
+                            echo '<br><span class="text-danger">Quá hạn trả</span>';
+                        } ?>
+                    </p>
+                    <div class="mt-auto">
+                        <span class="badge px-3 py-2 fs-6 
+                            <?php 
+                                if ($row['trang_thai'] == 'da_duyet') {
+                                    echo 'bg-success';
+                                } elseif ($row['trang_thai'] == 'cho_duyet') {
+                                    echo 'bg-warning text-dark';
+                                } else {
+                                    echo 'bg-danger';
+                                }
+                            ?>">
+                            <?php 
+                                if ($row['trang_thai'] == 'da_duyet') {
+                                    echo 'Đã duyệt';
+                                } elseif ($row['trang_thai'] == 'cho_duyet') {
+                                    echo 'Chưa duyệt';
+                                } else {
+                                    echo 'Đã bị hủy';
+                                }
+                            ?>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php 
             }
-            ?>
-        </tbody>
-    </table>
+        } else {
+            echo '<div class="col-12 text-center"><p class="text-muted">Bạn chưa mượn sách nào.</p></div>';
+        }
+        ?>
+    </div>
 </div>
