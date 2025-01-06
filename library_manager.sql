@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th12 30, 2024 lúc 07:26 AM
+-- Thời gian đã tạo: Th1 06, 2025 lúc 09:59 AM
 -- Phiên bản máy phục vụ: 10.4.32-MariaDB
 -- Phiên bản PHP: 8.2.12
 
@@ -40,9 +40,7 @@ CREATE TABLE `dat_sach` (
 --
 
 INSERT INTO `dat_sach` (`ma_dat_sach`, `code_cart`, `ma_user`, `ngay_dat`, `trang_thai`) VALUES
-(37, '2194', 1, '2024-12-28', 'cho_duyet'),
-(38, '5425', 1, '2024-12-28', 'cho_duyet'),
-(39, '477', 2, '2024-12-28', 'cho_duyet');
+(40, '5017', 1, '2025-01-06', 'cho_duyet');
 
 -- --------------------------------------------------------
 
@@ -61,13 +59,9 @@ CREATE TABLE `dat_sach_chi_tiet` (
 --
 
 INSERT INTO `dat_sach_chi_tiet` (`ma_dat_sach_chi_tiet`, `ma_sach`, `code_cart`) VALUES
-(36, 14, '2194'),
-(37, 18, '2194'),
-(38, 11, '2194'),
-(39, 11, '5425'),
-(40, 11, '477'),
-(41, 12, '477'),
-(42, 13, '477');
+(43, 16, '5017'),
+(44, 17, '5017'),
+(45, 15, '5017');
 
 -- --------------------------------------------------------
 
@@ -148,13 +142,6 @@ CREATE TABLE `phieu_muon` (
   `ngay_muon` date DEFAULT NULL,
   `ngay_tra` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Đang đổ dữ liệu cho bảng `phieu_muon`
---
-
-INSERT INTO `phieu_muon` (`ma_phieu_muon`, `ma_user`, `code_cart`, `ngay_muon`, `ngay_tra`) VALUES
-(19, 1, '2194', '2024-12-28', '2025-01-17');
 
 -- --------------------------------------------------------
 
@@ -344,13 +331,13 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT cho bảng `dat_sach`
 --
 ALTER TABLE `dat_sach`
-  MODIFY `ma_dat_sach` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+  MODIFY `ma_dat_sach` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
 -- AUTO_INCREMENT cho bảng `dat_sach_chi_tiet`
 --
 ALTER TABLE `dat_sach_chi_tiet`
-  MODIFY `ma_dat_sach_chi_tiet` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+  MODIFY `ma_dat_sach_chi_tiet` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 --
 -- AUTO_INCREMENT cho bảng `nguoi_dung`
@@ -374,7 +361,7 @@ ALTER TABLE `phat`
 -- AUTO_INCREMENT cho bảng `phieu_muon`
 --
 ALTER TABLE `phieu_muon`
-  MODIFY `ma_phieu_muon` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `ma_phieu_muon` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT cho bảng `sach`
