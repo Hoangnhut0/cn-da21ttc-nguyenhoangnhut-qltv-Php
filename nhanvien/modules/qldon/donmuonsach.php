@@ -2,81 +2,96 @@
     $sql = "SELECT * FROM dat_sach
             JOIN user ON dat_sach.ma_user = user.ma_user";
     $query = mysqli_query($conn, $sql);
-
 ?>
 
-<!-- Tiếp tục phần còn lại của mã HTML và PHP như bình thường -->
-<div class="card mb-4">
-    <?php
-        if (isset($_SESSION['message'])) {
-            $message = $_SESSION['message'];
-            $message_type = $_SESSION['message_type'];
-            
-            // Xử lý hiển thị thông báo theo loại (thành công, lỗi)
-            if ($message_type == "success") {
-                echo '<div class="alert alert-success" role="alert">' . $message . '</div>';
-            } elseif ($message_type == "error") {
-                echo '<div class="alert alert-danger" role="alert">' . $message . '</div>';
-            }
-            
-            // Sau khi hiển thị thông báo, xóa thông báo khỏi session
-            unset($_SESSION['message']);
-            unset($_SESSION['message_type']);
-        }
-    ?>
-    <div class="card-body">
-        <div class="card-header">
-            <i class="fas fa-table me-1"></i>
-            Đơn mượn sách
+<div class="container mt-4">
+    <!-- Card Wrapper -->
+    <div class="card shadow-lg border-0">
+        <!-- Header -->
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0 d-flex align-items-center">
+                <i class="fas fa-book-reader me-2"></i> Danh Sách Đơn Mượn Sách
+            </h5>
         </div>
         <div class="card-body">
-            <table id="datatablesSimple" class="table table-striped table-hover table-bordered">
-                <thead>
-                    <tr>
-                        <th>Mã đơn</th>
-                        <th>Tên người đặt</th>
-                        <th>Địa chỉ</th>
-                        <th>Số điện thoại</th>
-                        <th>Email</th>
-                        <th>Trạng thái</th>
-                        <th>Chi tiết đơn</th>
-                        <th>Thao tác</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                        $i = 0;
-                        while($row = mysqli_fetch_array($query)){
-                            $i++
-                    ?>
+            <!-- Notification -->
+            <?php if (isset($_SESSION['message'])): ?>
+                <div class="alert alert-<?php echo ($_SESSION['message_type'] == "success") ? "success" : "danger"; ?> alert-dismissible fade show" role="alert">
+                    <strong><?php echo $_SESSION['message']; ?></strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <?php unset($_SESSION['message'], $_SESSION['message_type']); ?>
+            <?php endif; ?>
+
+            <!-- Table -->
+            <div class="table-responsive">
+                <table id="datatablesSimple" class="table table-striped table-hover table-bordered align-middle">
+                    <thead class="table-dark text-center">
                         <tr>
-                            <td><?php echo $row['code_cart'];?></td>
-                            <td><?php echo $row['hoten_user']; ?></td>
-                            <td><?php echo $row['dia_chi'];?></td>
-                            <td><?php echo $row['so_dien_thoai'];?></td>
-                            <td><?php echo $row['email'];?></td>
-                            <td>
+                            <th>Mã Đơn</th>
+                            <th>Tên Người Đặt</th>
+                            <th>Địa Chỉ</th>
+                            <th>Số Điện Thoại</th>
+                            <th>Email</th>
+                            <th>Trạng Thái</th>
+                            <th>Chi Tiết Đơn</th>
+                            <th>Thao Tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php while ($row = mysqli_fetch_array($query)): ?>
+                        <tr>
+                            <td class="text-center"><?php echo htmlspecialchars($row['code_cart']); ?></td>
+                            <td><?php echo htmlspecialchars($row['hoten_user']); ?></td>
+                            <td><?php echo htmlspecialchars($row['dia_chi']); ?></td>
+                            <td><?php echo htmlspecialchars($row['so_dien_thoai']); ?></td>
+                            <td><?php echo htmlspecialchars($row['email']); ?></td>
+                            <td class="text-center">
                                 <?php 
-                                // Kiểm tra trạng thái của đơn hàng
-                                    if ($row['trang_thai'] == "da_duyet") {
-                                        echo '<span class="badge bg-success">Đã duyệt</span>';
-                                    } elseif ($row['trang_thai'] == "cho_duyet") {
-                                        echo '<a href="modules/qldon/xuly_don.php?code_cart=' . $row['code_cart'] . '" class="badge bg-warning text-dark">Chưa duyệt</a>';
-                                    } else {
-                                        echo '<span class="badge bg-danger">Đã bị hủy</span>';
-                                    }
+                                switch ($row['trang_thai']) {
+                                    case "da_duyet":
+                                        echo '<span class="badge bg-success"><i class="fas fa-check-circle"></i> Đã Duyệt</span>';
+                                        break;
+                                    case "cho_duyet":
+                                        echo '<span class="badge bg-warning text-dark"><i class="fas fa-clock"></i> Chờ Duyệt</span>';
+                                        break;
+                                    case "da_tra":
+                                        echo '<span class="badge bg-info text-white"><i class="fas fa-undo"></i> Đã Trả</span>';
+                                        break;
+                                    default:
+                                        echo '<span class="badge bg-danger"><i class="fas fa-exclamation-circle"></i> Đã Hủy</span>';
+                                        break;
+                                }
                                 ?>
                             </td>
-
-                            <td>
-                                <a href="index.php?action=don&query=xemdon&code=<?php echo $row['code_cart']; ?>">Xem đơn</a>
-                                <a href="modules/qldon/xuly_don.php?tra=<?php echo $row['code_cart']; ?>">Trả</a>
+                            <td class="text-center">
+                                <a href="index.php?action=don&query=xemdon&code=<?php echo htmlspecialchars($row['code_cart']); ?>" class="btn btn-primary btn-sm shadow-sm">
+                                    <i class="fas fa-eye"></i> Xem Đơn
+                                </a>
                             </td>
-                            <td><a href="modules/qldon/xuly_don.php?xoa=<?php echo $row['code_cart']; ?>" onclick="return confirm('Bạn chắc chắn muốn xóa đơn hàng này?')">Xóa</a></td>
+                            <td class="text-center">
+                                <?php if ($row['trang_thai'] == "cho_duyet"): ?>
+                                    <a href="modules/qldon/xuly_don.php?code_cart=<?php echo htmlspecialchars($row['code_cart']); ?>" class="btn btn-warning btn-sm shadow-sm">
+                                        <i class="fas fa-check"></i> Duyệt
+                                    </a>
+                                    <a href="modules/qldon/xuly_don.php?huy=<?php echo htmlspecialchars($row['code_cart']); ?>" onclick="return confirm('Bạn chắc chắn muốn hủy đơn hàng này?')" class="btn btn-secondary btn-sm shadow-sm">
+                                        <i class="fas fa-times"></i> Hủy
+                                    </a>
+                                <?php endif; ?>
+                                <?php if ($row['trang_thai'] == "da_duyet"): ?>
+                                    <a href="modules/qldon/xuly_don.php?tra=<?php echo htmlspecialchars($row['code_cart']); ?>" class="btn btn-success btn-sm shadow-sm">
+                                        <i class="fas fa-undo"></i> Trả
+                                    </a>
+                                <?php endif; ?>
+                                <a href="modules/qldon/xuly_don.php?xoa=<?php echo htmlspecialchars($row['code_cart']); ?>" onclick="return confirm('Bạn chắc chắn muốn xóa đơn hàng này?')" class="btn btn-danger btn-sm shadow-sm">
+                                    <i class="fas fa-trash"></i> Xóa
+                                </a>
+                            </td>
                         </tr>
-                    <?php }?>
-                </tbody>
-            </table>
+                        <?php endwhile; ?>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>

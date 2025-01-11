@@ -10,6 +10,8 @@
             include('modules/qldon/donmuonsach.php');
         }elseif($tam == 'don' && $query = 'xemdon'){
             include('modules/qldon/chitietdon.php');
+        }elseif($tam == 'phieumuon' && $query = 'xemphieu'){
+            include('modules/qldon/phieumuon.php');
         }
         else{
             include('dashboard.php');

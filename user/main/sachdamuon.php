@@ -18,7 +18,7 @@ $query = mysqli_query($conn, $sql_select);
         if ($query->num_rows > 0) {
             while ($row = $query->fetch_assoc()) {
                 // Lấy ngày trả và kiểm tra trạng thái
-                $ngay_tra = ($row['trang_thai'] == 'da_duyet' && !empty($row['ngay_tra'])) ? date("d/m/Y", strtotime($row['ngay_tra'])) : 'Chưa duyệt';
+                $ngay_tra = !empty($row['ngay_tra']) ? date("d/m/Y", strtotime($row['ngay_tra'])) : 'Chưa duyệt';
 
                 // Kiểm tra nếu đã quá hạn trả
                 $is_qua_han = false;
@@ -51,6 +51,8 @@ $query = mysqli_query($conn, $sql_select);
                                     echo 'bg-success';
                                 } elseif ($row['trang_thai'] == 'cho_duyet') {
                                     echo 'bg-warning text-dark';
+                                } elseif ($row['trang_thai'] == 'da_tra') {
+                                    echo 'bg-primary';
                                 } else {
                                     echo 'bg-danger';
                                 }
@@ -60,6 +62,8 @@ $query = mysqli_query($conn, $sql_select);
                                     echo 'Đã duyệt';
                                 } elseif ($row['trang_thai'] == 'cho_duyet') {
                                     echo 'Chưa duyệt';
+                                } elseif ($row['trang_thai'] == 'da_tra') {
+                                    echo 'Đã trả';
                                 } else {
                                     echo 'Đã bị hủy';
                                 }
@@ -77,3 +81,4 @@ $query = mysqli_query($conn, $sql_select);
         ?>
     </div>
 </div>
+

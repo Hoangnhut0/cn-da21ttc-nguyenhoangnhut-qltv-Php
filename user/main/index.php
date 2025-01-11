@@ -1,18 +1,13 @@
 <?php
-// Lấy từ khóa tìm kiếm từ URL
 $search_keyword = isset($_GET['search']) ? $conn->real_escape_string($_GET['search']) : "";
 
-// Lấy trang hiện tại từ URL, mặc định là 1
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $page = $page < 1 ? 1 : $page;
 
-// Số lượng sách mỗi trang
 $books_per_page = 8;
 
-// Tính toán OFFSET
 $offset = ($page - 1) * $books_per_page;
 
-// Tạo câu truy vấn SQL
 $sql = "SELECT * FROM sach 
         JOIN tac_gia ON sach.ma_tac_gia = tac_gia.ma_tac_gia
         JOIN the_loai ON sach.ma_the_loai = the_loai.ma_the_loai
@@ -23,7 +18,6 @@ $sql = "SELECT * FROM sach
 
 $query = mysqli_query($conn, $sql);
 
-// Tính tổng số sách để tạo phân trang
 $total_books_sql = "SELECT COUNT(*) as total FROM sach 
                     JOIN tac_gia ON sach.ma_tac_gia = tac_gia.ma_tac_gia
                     JOIN the_loai ON sach.ma_the_loai = the_loai.ma_the_loai
@@ -34,7 +28,6 @@ $total_books_result = mysqli_query($conn, $total_books_sql);
 $total_books_row = mysqli_fetch_assoc($total_books_result);
 $total_books = $total_books_row['total'];
 
-// Tính tổng số trang
 $total_pages = ceil($total_books / $books_per_page);
 ?>
 
